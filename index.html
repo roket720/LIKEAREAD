@@ -632,25 +632,21 @@ async function callAI(text){
     'You are LexiRead AI — a reading assistant for Indian English learners.\n'+
     'The student selected this text from a PDF: "'+text+'"\n'+
     'It could be a single word, multi-word phrase, idiom, or sentence structure.\n'+
-    'Analyse the ENTIRE selected text as ONE unit. Do not explain just one word if a phrase is given.\n\n'+
-    'Reply with ONLY a raw JSON object — no markdown, no backticks, nothing else.\n\n'+
-    'Required format:\n'+
+    'Analyse the ENTIRE selected text as ONE unit.\n\n'+
+    'Reply with ONLY a raw JSON object.\n\n'+
     '{\n'+
     '  "word": "exact selected text",\n'+
     '  "hindi_meaning": "Hindi in Devanagari",\n'+
     '  "transliteration": "Roman transliteration",\n'+
     '  "synonyms": ["s1","s2","s3"],\n'+
     '  "antonyms": ["a1","a2","a3"],\n'+
-    '  "example": "One natural English sentence using the selected text",\n'+
-    '  "alt_word": "One alternative English word or phrase",\n'+
-    '  "alt_example": "One sentence using the alternative"\n'+
+    '  "example": "One natural English sentence",\n'+
+    '  "alt_word": "Alternative word",\n'+
+    '  "alt_example": "Example sentence"\n'+
     '}';
 
-async function callAI(text){
-  const prompt = '...'; // keep your existing prompt
-
   const res = await fetch(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key='+API_KEY,
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + API_KEY,
     {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -661,14 +657,21 @@ async function callAI(text){
     }
   );
 
-  // keep rest of your code SAME
-}
-
   if(!res.ok){
     const e = await res.json().catch(()=>({}));
     throw new Error((e.error && e.error.message)||'API error '+res.status);
   }
 
+  const data = await res.json();
+
+  if(!data.candidates || !data.candidates[0]){
+    throw new Error('Empty response from AI');
+  }
+
+  const raw = data.candidates[0].content.parts[0].text;
+
+  return JSON.parse(raw.replace(/```json|```/g,'').trim());
+}
   const data = await res.json();
   if(data.error) throw new Error(data.error.message);
   if(!data.candidates || !data.candidates[0] || !data.candidates[0].content)
