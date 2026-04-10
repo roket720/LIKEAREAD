@@ -641,21 +641,23 @@ async function callAI(text){
     '  "alt_example": "One sentence using the alternative"\n'+
     '}';
 
-const res = await fetch(
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=' + API_KEY,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: 'application/json'
-      }
-    })
-  }
-);
+async function callAI(text){
+  const prompt = '...'; // keep your existing prompt
+
+  const res = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key='+API_KEY,
+    {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        generationConfig:{responseMimeType:'application/json'}
+      })
+    }
+  );
+
+  // keep rest of your code SAME
+}
 
   if(!res.ok){
     const e = await res.json().catch(()=>({}));
