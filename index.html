@@ -92,7 +92,7 @@ canvas{display:block;z-index:1;}
 @keyframes spin{100%{transform:rotate(360deg)}}
 
 /* Overlay for modals */
-.overlay{position:fixed;inset:0;background:rgba(15,14,26,.6);backdrop-filter:blur(4px);z-index:2050;}
+.overlay{position:fixed;inset:0;background:rgba(15,14,26,.25);z-index:2050;}
 </style>
 </head>
 
@@ -642,7 +642,7 @@ async function callAI(text){
     '}';
 
   const res = await fetch(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+API_KEY,
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key='+API_KEY,
     {
       method:'POST',
       headers:{'Content-Type':'application/json'},
