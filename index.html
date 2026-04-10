@@ -93,9 +93,10 @@ canvas{display:block;z-index:1;}
 
 /* Overlay for modals */
 .overlay{
-  background: rgba(15,14,26,0.4);
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
+  position:fixed;
+  inset:0;
+  background: rgba(15,14,26,0.25); /* lighter */
+  z-index:2050;
 }
 </style>
 </head>
